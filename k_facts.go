@@ -59,6 +59,8 @@ var scientificFacts = []string{
 }
 
 var funFacts = []string{
+	"Two tons of potassium is enough to crush a horse.",
+	"Potassium is soft enough to cut with a butter knife. This makes a great experiment to try at home!",
 	"Bananas are famously rich in potassium, but not the best source.",
 	"A banana contains about 422 mg of potassium.",
 	"Too much potassium at once can stop your heart.",
