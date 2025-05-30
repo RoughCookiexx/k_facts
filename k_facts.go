@@ -115,7 +115,7 @@ var funFacts = []string{
 }
 
 // GetRandomPotassiumFact returns a random potassium fact from the combined list.
-func GetRandomPotassiumFact() string {
+func GetRandomPotassiumFact(_ string) string {
 	rand.Seed(time.Now().UnixNano())
 	allFacts := append(scientificFacts, funFacts...)
 	return allFacts[rand.Intn(len(allFacts))]
