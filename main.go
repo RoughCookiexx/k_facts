@@ -4,9 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
-	"net/url"
+	"os"
 	"strings"
+
+	"github.com/RoughCookiexx/twitch_chat_subscriber"
 )
 
 type FactResponse struct {
@@ -34,32 +37,23 @@ func factHandler(w http.ResponseWriter, r *http.Request) {
 
 func sendSubscriptionRequest() {
 	fmt.Println("Subscribing to chat message stream\n")
-	otherAppSubscribeEndpoint := "http://127.0.0.1:6969/subscribe" // The other app's IP:PORT/path
-	ourFactCallbackURL := "http://localhost:6970/fact"  // Our app's endpoint for receiving facts
-                                                                  // Adjust host/port if this app isn't on localhost:8080
-                                                                  // or if the other app needs a different address to reach this one.
-
-	// Prepare the full URL with our callback as a query parameter
-	data := url.Values{}
-	data.Set("url", ourFactCallbackURL)
-	requestURL := fmt.Sprintf("%s?%s", otherAppSubscribeEndpoint, data.Encode())
-
-	// Send the POST request.
-	// The other app's /subscribe endpoint (from previous context) expects 'url' in the query string.
-	// Body is nil as data is in the URL.
-	resp, err := http.Post(requestURL, "application/x-www-form-urlencoded", nil)
+	targetURL := "http://localhost:6969/subscribe"
+	callbackURL := "http://localhost:6970/fact"
+	filterPattern := "Potassium"
+	
+	response, err := twitch_chat_subscriber.SendRequestWithCallbackAndRegex(targetURL, callbackURL, filterPattern)
+	
 	if err != nil {
-		fmt.Println("Error sending subscription request to %s: %v\n", requestURL, err)
-		return
+		fmt.Errorf("Failed to subscribe to Twitch chat message stream.\n%s", err)
 	}
-	defer resp.Body.Close()
 
-	fmt.Printf("Subscription request sent to %s. Status: %s\n", requestURL, resp.Status)
-	// Optionally, read resp.Body for more details from the other app
+	fmt.Printf("Subscribed to Twitch chat message stream. Status: %s Err: %s\n", response)
 }
 
 func main() {
 	fmt.Println("Starting k_facts\n")
+	log.SetOutput(os.Stdout)
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	http.HandleFunc("/fact", factHandler)
 	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
