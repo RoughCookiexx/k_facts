@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
+	
+	"github.com/RoughCookiexx/gg_twitch_types"
 )
 
 var scientificFacts = []string{
@@ -59,6 +62,7 @@ var scientificFacts = []string{
 }
 
 var funFacts = []string{
+	"The latin words Potens and Somnium, which mean 'powerful' and 'dream' respectively sound a lot like if you say 'potassium' while chewing on a banana." ,
 	"Two tons of potassium is enough to crush a horse.",
 	"Potassium is soft enough to cut with a butter knife. This makes a great experiment to try at home!",
 	"Bananas are famously rich in potassium, but not the best source.",
@@ -114,8 +118,8 @@ var funFacts = []string{
 	"Your body throws a tantrum if potassium levels drop too fast.",
 }
 
-// GetRandomPotassiumFact returns a random potassium fact from the combined list.
-func GetRandomPotassiumFact(_ string) string {
+func GetRandomPotassiumFact(_ twitch_types.Message) (string){
+	fmt.Println("Selecting a random fact about potassium")
 	rand.Seed(time.Now().UnixNano())
 	allFacts := append(scientificFacts, funFacts...)
 	return allFacts[rand.Intn(len(allFacts))]

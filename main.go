@@ -18,13 +18,13 @@ func sendSubscriptionRequest() {
 	targetURL := "http://localhost:6969/subscribe"
 	filterPattern := "Potassium"
 	
-	response, err := twitch_chat_subscriber.SendRequestWithCallbackAndRegex(targetURL, GetRandomPotassiumFact, filterPattern)
+	response, err := twitch_chat_subscriber.SendRequestWithCallbackAndRegex(targetURL, GetRandomPotassiumFact, filterPattern, 6974)
 	
 	if err != nil {
 		fmt.Errorf("Failed to subscribe to Twitch chat message stream.\n%s", err)
 	}
 
-	fmt.Printf("Subscribed to Twitch chat message stream. Status: %s Err: %s\n", response)
+	fmt.Printf("Subscribed to Twitch chat message stream. Status: %s Err: %s\n", response, err)
 }
 
 func main() {
@@ -35,6 +35,6 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	})
 	sendSubscriptionRequest()
-	http.ListenAndServe(":6970", nil)
+	http.ListenAndServe(":6974", nil)
 }
 
